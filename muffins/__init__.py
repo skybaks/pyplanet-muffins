@@ -34,7 +34,7 @@ class MuffinsApp(AppConfig):
 				target_player = online_player
 				logger.debug('Found player ' + data_player)
 				break
-		if not target_player:
+		else:
 			await self.instance.chat(f'$f00No player player found for $<$fff{data_player}$>', player)
 			return
 
