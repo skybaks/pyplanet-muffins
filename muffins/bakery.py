@@ -167,5 +167,5 @@ def roll_muffin() -> Muffin:
 		selected_tier = MuffinTier.UNCOMMON
 	else:
 		selected_tier = MuffinTier.NORMAL
-	logger.info(f'Rolled a {str(roll)} which is a ' + str(selected_tier))
+	logger.debug(f'Rolled a {str(roll)} which is a ' + str(selected_tier))
 	return random.choice([muffin for muffin in MUFFINS if muffin.tier == selected_tier])
