@@ -2,7 +2,7 @@ import logging
 
 from pyplanet.apps.config import AppConfig
 from pyplanet.contrib.command import Command
-from pyplanet.contrib.player.exceptions import PlayerNotFound
+from pyplanet.utils.style import style_strip
 
 from .bakery import roll_muffin
 
@@ -30,7 +30,7 @@ class MuffinsApp(AppConfig):
 		target_player = None
 		for online_player in self.instance.player_manager.online:
 			if online_player.login == data_player \
-				or online_player.nickname.lower() == data_player.lower():
+				or style_strip(online_player.nickname.lower()) == data_player.lower():
 				target_player = online_player
 				logger.debug('Found player ' + data_player)
 				break
