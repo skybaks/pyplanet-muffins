@@ -40,8 +40,9 @@ class MuffinsApp(AppConfig):
 		muffin = roll_muffin()
 		muffin_text = await self._get_muffin_text(muffin)
 		await self.instance.chat(f'$ff0$<$fff{player.nickname}$> » {muffin_text} for $<$fff{target_player.nickname}$>')
+		await self.instance.chat(f'$0cfYou received a muffin! Use $<$fff/eat$> to eat it or $<$fff/muffin$> to give it to another player', target_player.login)
 
-		logger.info('Create new entry for muffin')
+		logger.debug('Create new entry for muffin')
 		try:
 			await PlayerMuffin.execute(PlayerMuffin.insert(login=target_player.login, muffin_name=muffin.name, muffin_tier=int(muffin.tier)))
 		except Exception as e:
@@ -61,8 +62,9 @@ class MuffinsApp(AppConfig):
 			muffin = Muffin.from_playermuffin(player_muffin)
 			muffin_text = await self._get_muffin_text(muffin)
 			await self.instance.chat(f'$ff0$<$fff{player.nickname}$> gives their $<$fff{muffin_text}$> to $<$fff{target_player.nickname}$>')
+			await self.instance.chat(f'$0cfYou received a muffin! Use $<$fff/eat$> to eat it or $<$fff/muffin$> to give it to another player', target_player.login)
 
-			logger.info('Updating the login of muffin with id ' + str(player_muffin.id))
+			logger.debug('Updating the login of muffin with id ' + str(player_muffin.id))
 			try:
 				await PlayerMuffin.execute(PlayerMuffin.update(login=target_player.login).where(PlayerMuffin.id == player_muffin.id))
 			except Exception as e:
@@ -79,7 +81,7 @@ class MuffinsApp(AppConfig):
 			muffin_text = await self._get_muffin_text(muffin)
 			await self.instance.chat(f'$ff0$<$fff{player.nickname}$> eats their $<$fff{muffin_text}$>. It tastes {muffin.get_taste()}')
 
-			logger.info('Deleting muffin with id ' + str(player_muffin.id))
+			logger.debug('Deleting muffin with id ' + str(player_muffin.id))
 			try:
 				await PlayerMuffin.execute(PlayerMuffin.delete().where(PlayerMuffin.id == player_muffin.id))
 			except Exception as e:
