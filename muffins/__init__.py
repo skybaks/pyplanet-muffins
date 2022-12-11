@@ -77,7 +77,7 @@ class MuffinsApp(AppConfig):
 			player_muffin = players_muffins[randrange(0, len(players_muffins))]
 			muffin = Muffin.from_playermuffin(player_muffin)
 			muffin_text = await self._get_muffin_text(muffin)
-			await self.instance.chat(f'$ff0$<$fff{player.nickname}$> eats their $<$fff{muffin_text}$>. It is delicious')
+			await self.instance.chat(f'$ff0$<$fff{player.nickname}$> eats their $<$fff{muffin_text}$>. It tastes {muffin.get_taste()}')
 
 			logger.info('Deleting muffin with id ' + str(player_muffin.id))
 			try:

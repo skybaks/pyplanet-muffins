@@ -33,6 +33,39 @@ class Muffin:
 	def fmt_tier(self) -> str:
 		return MuffinTier.fmt_string(self.tier)
 
+	def get_taste(self) -> str:
+		tastes = []
+		if self.tier == MuffinTier.LEGENDARY:
+			tastes += [
+				'heavenly!',
+				'scrumdiddlyumptious!',
+				'sublime!',
+				'amazing!',
+				'incredible!',
+			]
+		elif self.tier == MuffinTier.RARE:
+			tastes += [
+				'good.',
+				'flavorful.',
+				'zesty.',
+				'unique.',
+				'quite yummy.',
+				'quite good.',
+			]
+		elif self.tier == MuffinTier.UNCOMMON:
+			tastes += [
+				'pretty good.',
+				'nice.',
+				'yummy.',
+			]
+		else:
+			tastes += [
+				'okay.',
+				'alright.',
+				'interesting.',
+			]
+		return random.choice(tastes)
+
 	@staticmethod
 	def from_playermuffin(player_muffin) -> 'Muffin':
 		return Muffin(player_muffin.muffin_name, MuffinTier(player_muffin.muffin_tier))
