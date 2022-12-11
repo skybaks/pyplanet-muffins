@@ -1,15 +1,15 @@
 import logging
 import random
-from enum import Enum
+from enum import IntEnum
 
 logger = logging.getLogger(__name__)
 
 
-class MuffinTier(Enum):
-	NORMAL = 0
-	UNCOMMON = 1
-	RARE = 2
-	LEGENDARY = 3
+class MuffinTier(IntEnum):
+	NORMAL = 100
+	UNCOMMON = 200
+	RARE = 300
+	LEGENDARY = 400
 
 	@staticmethod
 	def fmt_string(value: 'MuffinTier') -> str:
@@ -32,6 +32,10 @@ class Muffin:
 
 	def fmt_tier(self) -> str:
 		return MuffinTier.fmt_string(self.tier)
+
+	@staticmethod
+	def from_playermuffin(player_muffin) -> 'Muffin':
+		return Muffin(player_muffin.muffin_name, MuffinTier(player_muffin.muffin_tier))
 
 
 def _create_muffin_list() -> 'list[Muffin]':
