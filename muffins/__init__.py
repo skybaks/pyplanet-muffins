@@ -96,13 +96,16 @@ class MuffinsApp(AppConfig):
 
 
 	async def _lookup_player(self, search_text) -> Player:
-		for online_player in self.instance.player_manager.online:
-			if online_player.login == search_text \
-				or style_strip(online_player.nickname.lower()) == search_text.lower():
-				logger.debug('Found player ' + search_text)
+		online_players = self.instance.player_manager.online # type: list[Player]
+		for online_player in online_players:
+			if online_player.login == search_text:
+				logger.debug('Found player by login ' + search_text)
 				return online_player
-		else:
-			return None
+		for online_player in online_players:
+			if style_strip(online_player.nickname).lower() == search_text.lower():
+				logger.debug('Found player by nickname ' + search_text)
+				return online_player
+		return None
 
 
 	async def _get_muffin_text(self, muffin) -> str:
