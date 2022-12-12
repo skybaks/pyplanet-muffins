@@ -42,27 +42,46 @@ class Muffin:
 				'sublime!',
 				'amazing!',
 				'incredible!',
+				'awesome!',
+				'fabulous!',
+				'perfect!',
+				'outstanding!',
+				'stupendous!',
+				'wonderful!',
+				'fantastic!',
+				'divine!',
 			]
 		elif self.tier == MuffinTier.RARE:
 			tastes += [
-				'good.',
 				'flavorful.',
 				'zesty.',
 				'unique.',
 				'quite yummy.',
 				'quite good.',
+				'savory.',
+				'excellent.',
+				'remarkable.',
+				'delectable.',
+				'delightful.',
+				'succulent.',
+				'rich.',
+				'scrumptious.',
+				'piquant.',
 			]
 		elif self.tier == MuffinTier.UNCOMMON:
 			tastes += [
+				'good.',
 				'pretty good.',
 				'nice.',
 				'yummy.',
+				'pleasant.',
 			]
 		else:
 			tastes += [
 				'okay.',
 				'alright.',
 				'interesting.',
+				'palatable.',
 			]
 		return random.choice(tastes)
 
