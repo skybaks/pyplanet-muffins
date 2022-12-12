@@ -189,18 +189,18 @@ def roll_muffin() -> Muffin:
 	""" Roll for a new muffin.
 
 	Chooses a random muffin from the list of muffins along the following distribution:
-	- 65% Normal
-	- 20% Uncommon
-	- 11% Rare
-	- 4% Legendary
+	- 50% Normal
+	- 30% Uncommon
+	- 15% Rare
+	- 5% Legendary
 	"""
 	roll = random.random()
 	selected_tier = None
-	if roll > 0.96:
+	if roll > 0.95:
 		selected_tier = MuffinTier.LEGENDARY
-	elif roll > 0.85:
+	elif roll > 0.80:
 		selected_tier = MuffinTier.RARE
-	elif roll > 0.65:
+	elif roll > 0.50:
 		selected_tier = MuffinTier.UNCOMMON
 	else:
 		selected_tier = MuffinTier.NORMAL
