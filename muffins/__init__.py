@@ -23,9 +23,9 @@ class MuffinsApp(AppConfig):
 	async def on_start(self):
 		await self.instance.permission_manager.register('baking', 'Allowed to bake muffins in the bakery', app=self, min_level=2, namespace='muffin')
 		await self.instance.command_manager.register(
-			Command(command='muffin', aliases=[], target=self.bake_muffin, admin=True, perms='muffin:baking', description='Bake a muffin for a player')
+			Command(command='muffin', aliases=['m'], target=self.bake_muffin, admin=True, perms='muffin:baking', description='Bake a muffin for a player')
 				.add_param(name='player', nargs='*', type=str, required=True),
-			Command(command='muffin', aliases=[], target=self.give_muffin, description='Give one of your muffins to a player')
+			Command(command='muffin', aliases=['m'], target=self.give_muffin, description='Give one of your muffins to a player')
 				.add_param(name='player', nargs='*', type=str, required=True),
 			Command(command='eat', aliases=[], target=self.eat_muffin, description='Eat one of your muffins. Yummy!'),
 		)
