@@ -57,9 +57,11 @@ class MuffinsApp(AppConfig):
 			await self.instance.chat(f'$f00No player found for $<$fff{data_player}$>', player)
 			return
 
-		players_muffins = await self._get_muffins(player.login)
-		if len(players_muffins) > 0:
-			player_muffin = players_muffins[randrange(0, len(players_muffins))]
+		player_muffins = await self._get_muffins(player.login)
+		if len(player_muffins) > 0:
+			min_tier = min([int(muffin.muffin_tier) for muffin in player_muffins])
+			min_tier_muffins = [muffin for muffin in player_muffins if int(muffin.muffin_tier) == min_tier]
+			player_muffin = min_tier_muffins[randrange(0, len(min_tier_muffins))]
 			muffin = Muffin.from_playermuffin(player_muffin)
 			muffin_text = await self._get_muffin_text(muffin)
 			await self.instance.chat(f'$ff0$<$fff{player.nickname}$> gives their $<$fff{muffin_text}$> to $<$fff{target_player.nickname}$>')
