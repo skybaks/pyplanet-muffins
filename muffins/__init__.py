@@ -25,9 +25,10 @@ class MuffinsApp(AppConfig):
 		await self.instance.command_manager.register(
 			Command(command='muffin', aliases=[], target=self.bake_muffin, admin=True, perms='muffin:baking', description='Bake a muffin for a player')
 				.add_param(name='player', nargs='*', type=str, required=True),
-			Command(command='muffin', aliases=[], target=self.action_muffin, description='Do things with your muffins. Actions are "eat", "brag", or "give"')
-				.add_param(name='action', nargs=1, type=str, required=True)
-				.add_param(name='player', nargs='*', type=str, required=False),
+			Command(command='eat', aliases=[], target=self.eat_muffin, namespace='muffin', description='Eat one of your muffins... yummy!'),
+			Command(command='brag', aliases=[], target=self.brag_muffin, namespace='muffin', description='Show off one of your rarest muffins. Guaranteed to make everyone jealous!'),
+			Command(command='give', aliases=[], target=self.give_muffin, namespace='muffin', description='Give one of your muffins to another player. How magnanimous of you!')
+				.add_param(name='player', nargs='*', type=str, required=True),
 		)
 
 
@@ -49,20 +50,8 @@ class MuffinsApp(AppConfig):
 			logger.error(e)
 
 
-	async def action_muffin(self, player: Player, data, **kwargs) -> None:
-		action: str = data.action.lower() if data.action else ''
+	async def give_muffin(self, player: Player, data, **kwargs) -> None:
 		data_player: str = ' '.join(data.player) if data.player else ''
-		if action == 'eat':
-			await self.eat_muffin(player)
-		elif action == 'brag':
-			await self.brag_muffin(player)
-		elif action == 'give':
-			await self.give_muffin(player, data_player)
-		else:
-			await self.instance.chat(f'$f00Unknown arguments "{action} {data_player}". Use $<$fffeat$>, $<$fffbrag$>, or $<$fffgive$>', player)
-
-
-	async def give_muffin(self, player: Player, data_player: str) -> None:
 		target_player = await self._lookup_player(data_player)
 		if not target_player:
 			await self.instance.chat(f'$f00No player found for $<$fff{data_player}$>', player)
@@ -85,7 +74,7 @@ class MuffinsApp(AppConfig):
 			await self.instance.chat(f'$f00You don\'t have any muffins to give', player)
 
 
-	async def eat_muffin(self, player: Player) -> None:
+	async def eat_muffin(self, player: Player, data, **kwargs) -> None:
 		players_muffins = await self._get_muffins(player.login)
 		if len(players_muffins) > 0:
 			player_muffin = players_muffins[randrange(0, len(players_muffins))]
@@ -102,7 +91,7 @@ class MuffinsApp(AppConfig):
 			await self.instance.chat('$f00You don\'t have any muffins to eat', player)
 
 
-	async def brag_muffin(self, player: Player) -> None:
+	async def brag_muffin(self, player: Player, data, **kwargs) -> None:
 		player_muffins = await self._get_muffins(player.login)
 		if len(player_muffins) > 0:
 			max_tier = max([int(muffin.muffin_tier) for muffin in player_muffins])
