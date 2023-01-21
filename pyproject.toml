@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pyplanet-muffins"
+version = "1.1.0"
+authors = [
+    { name="skybaks", email="tmflame@gmail.com" },
+]
+description = "A muffins plugin for the Pyplanet Trackmania Dedicated Server controller"
+readme = "readme.md"
+requires-python = ">=3.7"
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+
+    "Operating System :: OS Independent",
+
+    "Topic :: Games/Entertainment",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/skybaks/pyplanet-muffins"
+"Bug Tracker" = "https://github.com/skybaks/pyplanet-muffins/issues"
