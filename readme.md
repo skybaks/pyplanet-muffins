@@ -4,6 +4,20 @@ A plugin for [PyPlanet](https://pypla.net/).
 
 The Muffins plugin allows you to bake, give, and eat muffins.
 
+## Installation
+
+Install or update to the latest version with the following command
+
+```
+python -m pip install --upgrade pyplanet-muffins
+```
+
+Add the following to you pyplanet apps.py
+
+```
+		'skybaks.muffins',
+```
+
 ## Commands
 
 |Command|Description|
