@@ -23,11 +23,11 @@ class MuffinsApp(AppConfig):
 	async def on_start(self):
 		await self.instance.permission_manager.register('baking', 'Allowed to bake muffins in the bakery', app=self, min_level=2, namespace='muffin')
 		await self.instance.command_manager.register(
-			Command(command='muffin', aliases=['m'], target=self.bake_muffin, admin=True, perms='muffin:baking', description='Bake a muffin for a player')
+			Command(command='muffin', aliases=[], target=self.bake_muffin, admin=True, perms='muffin:baking', description='Bake a muffin for a player')
 				.add_param(name='player', nargs='*', type=str, required=True),
-			Command(command='muffin', aliases=['m'], target=self.give_muffin, description='Give one of your muffins to a player')
-				.add_param(name='player', nargs='*', type=str, required=True),
-			Command(command='eat', aliases=[], target=self.eat_muffin, description='Eat one of your muffins. Yummy!'),
+			Command(command='muffin', aliases=[], target=self.action_muffin, description='Do things with your muffins. Actions are "eat", "brag", or "give"')
+				.add_param(name='action', nargs=1, type=str, required=True)
+				.add_param(name='player', nargs='*', type=str, required=False),
 		)
 
 
@@ -40,7 +40,7 @@ class MuffinsApp(AppConfig):
 		muffin = roll_muffin()
 		muffin_text = await self._get_muffin_text(muffin)
 		await self.instance.chat(f'$ff0$<$fff{player.nickname}$> » {muffin_text} for $<$fff{target_player.nickname}$>')
-		await self.instance.chat(f'$0cfYou received a muffin! Use $<$fff/eat$> to eat it or $<$fff/muffin$> to give it to another player', target_player.login)
+		await self.instance.chat(f'$0cfYou received a muffin! Use $<$fff/muffin eat$> to eat it, $<$fff/muffin brag$> to show off, or $<$fff/muffin give$> to give it to another player', target_player.login)
 
 		logger.debug('Create new entry for muffin')
 		try:
@@ -49,8 +49,20 @@ class MuffinsApp(AppConfig):
 			logger.error(e)
 
 
-	async def give_muffin(self, player: Player, data, **kwargs) -> None:
-		data_player = ' '.join(data.player)
+	async def action_muffin(self, player: Player, data, **kwargs) -> None:
+		action: str = data.action.lower() if data.action else ''
+		data_player: str = ' '.join(data.player) if data.player else ''
+		if action == 'eat':
+			await self.eat_muffin(player)
+		elif action == 'brag':
+			await self.brag_muffin(player)
+		elif action == 'give':
+			await self.give_muffin(player, data_player)
+		else:
+			await self.instance.chat(f'$f00Unknown arguments "{action} {data_player}". Use $<$fffeat$>, $<$fffbrag$>, or $<$fffgive$>', player)
+
+
+	async def give_muffin(self, player: Player, data_player: str) -> None:
 		target_player = await self._lookup_player(data_player)
 		if not target_player:
 			await self.instance.chat(f'$f00No player found for $<$fff{data_player}$>', player)
@@ -62,7 +74,7 @@ class MuffinsApp(AppConfig):
 			muffin = Muffin.from_playermuffin(player_muffin)
 			muffin_text = await self._get_muffin_text(muffin)
 			await self.instance.chat(f'$ff0$<$fff{player.nickname}$> gives their $<$fff{muffin_text}$> to $<$fff{target_player.nickname}$>')
-			await self.instance.chat(f'$0cfYou received a muffin! Use $<$fff/eat$> to eat it or $<$fff/muffin$> to give it to another player', target_player.login)
+			await self.instance.chat(f'$0cfYou received a muffin! Use $<$fff/muffin eat$> to eat it, $<$fff/muffin brag$> to show off, or $<$fff/muffin give$> to give it to another player', target_player.login)
 
 			logger.debug('Updating the login of muffin with id ' + str(player_muffin.id))
 			try:
@@ -73,7 +85,7 @@ class MuffinsApp(AppConfig):
 			await self.instance.chat(f'$f00You don\'t have any muffins to give', player)
 
 
-	async def eat_muffin(self, player: Player, data, **kwargs) -> None:
+	async def eat_muffin(self, player: Player) -> None:
 		players_muffins = await self._get_muffins(player.login)
 		if len(players_muffins) > 0:
 			player_muffin = players_muffins[randrange(0, len(players_muffins))]
@@ -88,6 +100,18 @@ class MuffinsApp(AppConfig):
 				logger.error(e)
 		else:
 			await self.instance.chat('$f00You don\'t have any muffins to eat', player)
+
+
+	async def brag_muffin(self, player: Player) -> None:
+		player_muffins = await self._get_muffins(player.login)
+		if len(player_muffins) > 0:
+			max_tier = max([int(muffin.muffin_tier) for muffin in player_muffins])
+			max_tier_muffins = [muffin for muffin in player_muffins if int(muffin.muffin_tier) == max_tier]
+			display_muffin = max_tier_muffins[randrange(0, len(max_tier_muffins))]
+			muffin_text = await self._get_muffin_text(Muffin.from_playermuffin(display_muffin))
+			await self.instance.chat(f'$ff0$<$fff{player.nickname}$> shows off their $<$fff{muffin_text}$>. They have {str(len(player_muffins))} muffin(s)')
+		else:
+			await self.instance.chat('$f00You don\'t have any muffins', player)
 
 
 	async def _get_muffins(self, login) -> 'list[PlayerMuffin]':
