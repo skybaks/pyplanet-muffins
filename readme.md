@@ -15,14 +15,14 @@ python -m pip install --upgrade pyplanet-muffins
 Add the following to you pyplanet apps.py
 
 ```
-		'skybaks.muffins',
+'skybaks.muffins',
 ```
 
 ## Commands
 
 |Command|Description|
 |---|---|
-| //muffin <login or nickname> | Bakes a brand new muffin and gives it to the player specified by login or nickname. Only available to admins. |
-| /muffin eat | Eat one of your muffins. Available to all players |
-| /muffin brag | Show off one of your rarest muffins. Available to all players |
-| /muffin give <login or nickname> | Give one of your muffins to the player specified by login or nickname. Available to all players. |
+| //bakery <login or nickname> | Bakes a brand new muffin and gives it to the player specified by login or nickname. Only available to admins. |
+| /bakery eat | Eat one of your muffins. Available to all players |
+| /bakery brag | Show off one of your rarest muffins. Available to all players |
+| /bakery give <login or nickname> | Give one of your muffins to the player specified by login or nickname. Available to all players. |

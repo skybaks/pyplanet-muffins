@@ -23,11 +23,11 @@ class MuffinsApp(AppConfig):
 	async def on_start(self):
 		await self.instance.permission_manager.register('baking', 'Allowed to bake muffins in the bakery', app=self, min_level=2, namespace='muffin')
 		await self.instance.command_manager.register(
-			Command(command='muffin', aliases=[], target=self.bake_muffin, admin=True, perms='muffin:baking', description='Bake a muffin for a player')
+			Command(command='bakery', aliases=[], target=self.bake_muffin, admin=True, perms='muffin:baking', description='Bake a muffin for a player')
 				.add_param(name='player', nargs='*', type=str, required=True),
-			Command(command='eat', aliases=[], target=self.eat_muffin, namespace='muffin', description='Eat one of your muffins... yummy!'),
-			Command(command='brag', aliases=[], target=self.brag_muffin, namespace='muffin', description='Show off one of your rarest muffins. Guaranteed to make everyone jealous!'),
-			Command(command='give', aliases=[], target=self.give_muffin, namespace='muffin', description='Give one of your muffins to another player. How magnanimous of you!')
+			Command(command='eat', aliases=[], target=self.eat_muffin, namespace='bakery', description='Eat one of your muffins... yummy!'),
+			Command(command='brag', aliases=[], target=self.brag_muffin, namespace='bakery', description='Show off one of your rarest muffins. Guaranteed to make everyone jealous!'),
+			Command(command='give', aliases=[], target=self.give_muffin, namespace='bakery', description='Give one of your muffins to another player. How magnanimous of you!')
 				.add_param(name='player', nargs='*', type=str, required=True),
 		)
 
@@ -41,7 +41,7 @@ class MuffinsApp(AppConfig):
 		muffin = roll_muffin()
 		muffin_text = await self._get_muffin_text(muffin)
 		await self.instance.chat(f'$ff0$<$fff{player.nickname}$> » {muffin_text} for $<$fff{target_player.nickname}$>')
-		await self.instance.chat(f'$0cfYou received a muffin! Use $<$fff/muffin eat$> to eat it, $<$fff/muffin brag$> to show off, or $<$fff/muffin give$> to give it to another player', target_player.login)
+		await self.instance.chat(f'$0cfYou received a muffin! Use $<$fff/bakery eat$> to eat it, $<$fff/bakery brag$> to show off, or $<$fff/bakery give$> to give it to another player', target_player.login)
 
 		logger.debug('Create new entry for muffin')
 		try:
@@ -65,7 +65,7 @@ class MuffinsApp(AppConfig):
 			muffin = Muffin.from_playermuffin(player_muffin)
 			muffin_text = await self._get_muffin_text(muffin)
 			await self.instance.chat(f'$ff0$<$fff{player.nickname}$> gives their $<$fff{muffin_text}$> to $<$fff{target_player.nickname}$>')
-			await self.instance.chat(f'$0cfYou received a muffin! Use $<$fff/muffin eat$> to eat it, $<$fff/muffin brag$> to show off, or $<$fff/muffin give$> to give it to another player', target_player.login)
+			await self.instance.chat(f'$0cfYou received a muffin! Use $<$fff/bakery eat$> to eat it, $<$fff/bakery brag$> to show off, or $<$fff/bakery give$> to give it to another player', target_player.login)
 
 			logger.debug('Updating the login of muffin with id ' + str(player_muffin.id))
 			try:
