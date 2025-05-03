@@ -178,6 +178,7 @@ def _create_muffin_list() -> 'list[Muffin]':
 		Muffin('Pepperoni Pizza Muffin', MuffinTier.RARE),
 		Muffin('Oatmeal Raisin Muffin', MuffinTier.RARE),
 		Muffin('Mango Coconut Muffin', MuffinTier.RARE),
+		Muffin('Cosmic Brownie Muffin', MuffinTier.RARE),
 
 		Muffin('Chocolate Zucchini Doughnut Muffin', MuffinTier.LEGENDARY),
 		Muffin('Chocolate Chip Baked Oatmeal Muffin', MuffinTier.LEGENDARY),
